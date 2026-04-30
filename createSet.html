@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+    <meta charset="UTF-8">
+    <script>
+        // Block render until theme is applied
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create | AI Study Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <div id="main-content">
+        <div class="app-container">
+            <h2 style="margin-bottom: 30px;">Build Your Study Set</h2>
+            <input type="text" id="setTitle" placeholder="Enter Set Title...">
+            
+            <div id="cardInputs">
+                <div class="card-row">
+                    <input type="text" class="term-input" placeholder="Term">
+                    <input type="text" class="def-input" placeholder="Definition">
+                    <div style="width: 34px;"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 25px;">
+                <button id="addRowBtn" class="secondary-btn">+ Add Another Card</button>
+                <button id="saveSetBtn" class="primary-btn">Save This Set</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="success-icon-circle">
+            <span class="checkmark">L</span>
+        </div>
+        
+        <h2>Set Saved!</h2>
+        <p class="modal-subtitle">What would you like to do next?</p>
+        
+        <div class="modal-actions">
+            <a href="viewSets.html" class="primary-btn full-width">View My Library</a>
+            <button onclick="location.reload()" class="secondary-btn full-width">Create Another</button>
+        </div>
+    </div>
+</div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/createLogic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('header.html').then(res => res.text()).then(data => {
+                document.getElementById('header-container').innerHTML = data;
+                initTheme();
+            });
+            fetch('footer.html').then(res => res.text()).then(data => {
+                document.getElementById('footer-container').innerHTML = data;
+            });
+        });
+    </script>
+</body>
+</html>

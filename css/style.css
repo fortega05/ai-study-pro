@@ -1,0 +1,413 @@
+/* --- COLOR & THEME VARIABLES --- */
+:root {
+    --bg-color: #f1f5f9;      /* Changed from #f8fafc to a slightly deeper gray-blue */
+    --container-bg: #ffffff;  /* Kept as pure white */
+    --text-main: #0f172a;
+    --text-sub: #64748b;
+    --border-color: #e2e8f0;  /* Slightly lighter border for a cleaner look */
+    --primary-blue: #2563eb;
+    --primary-hover: #1d4ed8;
+    --danger-red: #ef4444;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); /* Softer shadow for light mode */
+}
+
+[data-theme="dark"] {
+    --bg-color: #0f172a;
+    --container-bg: #1e293b;
+    --text-main: #f8fafc;
+    --text-sub: #94a3b8;
+    --border-color: #475569;
+}
+
+/* --- BASE SETUP --- */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    transition: background 0.3s, border 0.3s, color 0.3s; 
+}
+
+html, body { height: 100%; }
+
+body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- HEADER --- */
+.main-nav {
+    width: 100%; height: 80px;
+    background: var(--container-bg);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 40px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    position: sticky; top: 0; z-index: 1000;
+}
+
+.logo-link { display: flex; align-items: center; gap: 12px; text-decoration: none; width: 250px; }
+.nav-logo { height: 45px; width: 45px; border-radius: 10px; }
+.logo-text { font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+
+.nav-center { display: flex; gap: 30px; align-items: center; }
+.nav-center a { text-decoration: none; color: var(--text-main); font-weight: 600; }
+.nav-center a:hover { color: var(--primary-blue); }
+
+.nav-create-btn {
+    background: var(--primary-blue);
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.nav-right { width: 250px; display: flex; justify-content: flex-end; }
+
+.theme-toggle-nav {
+    background: var(--container-bg);
+    border: 2px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 700; color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+/* --- MAIN CONTENT & INPUTS --- */
+#main-content { flex: 1 0 auto; display: flex; justify-content: center; align-items: center; padding: 60px 20px; }
+.app-container { background: var(--container-bg); width: 100%; max-width: 850px; padding: 50px; border-radius: 28px; box-shadow: var(--shadow); }
+
+input[type="text"] {
+    width: 100%; padding: 15px; border: 2px solid var(--border-color) !important; 
+    border-radius: 12px; background: transparent; color: var(--text-main);
+    margin-bottom: 15px; outline: none;
+}
+input[type="text"]:focus { border-color: var(--primary-blue) !important; }
+
+.card-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+
+.delete-row-btn {
+    background: var(--danger-red);
+    color: white; border: none; width: 34px; height: 34px;
+    border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+
+/* --- RESTORED VIEWSETS LIST (1 PER ROW) --- */
+.sets-grid { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+
+.set-row {
+    background: var(--bg-color); 
+    padding: 24px 32px; 
+    border-radius: 16px;
+    border: 2px solid var(--border-color); 
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.set-row:hover { border-color: var(--primary-blue); }
+
+.set-info h3 { font-size: 1.4rem; color: var(--text-main); margin-top: 5px; }
+
+.card-count { 
+    font-size: 0.75rem; 
+    color: var(--text-sub); 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+.card-actions { display: flex; gap: 15px; align-items: center; }
+
+/* --- RESTORED BUTTON STYLES --- */
+.btn-study {
+    background: var(--primary-blue);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-edit {
+    background: transparent;
+    color: var(--text-main);
+    border: 2px solid var(--border-color);
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.btn-edit:hover {
+    border-color: var(--primary-blue);
+    color: var(--primary-blue);
+}
+
+.btn-delete {
+    background: transparent;
+    color: var(--danger-red);
+    border: 2px solid var(--danger-red);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: var(--danger-red);
+    color: white;
+}
+
+/* --- POPUP MODAL --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+    display: flex; justify-content: center; align-items: center; z-index: 2000;
+}
+.modal-content {
+    background: var(--container-bg); padding: 40px; border-radius: 24px;
+    text-align: center; box-shadow: var(--shadow); max-width: 400px; width: 90%;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-icon { font-size: 50px; margin-bottom: 20px; }
+.modal-actions { display: flex; flex-direction: column; gap: 12px; }
+
+/* --- GLOBAL BUTTONS & FOOTER --- */
+.primary-btn { background: var(--primary-blue); color: white; padding: 16px 32px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-block; }
+.secondary-btn { background: transparent; color: var(--primary-blue); border: 2px solid var(--primary-blue); padding: 12px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+
+.main-footer { 
+    flex-shrink: 0; 
+    width: 100%; 
+    background: var(--container-bg); 
+    padding: 50px 0; 
+    text-align: center; 
+    border-top: none; /* Changed from 1px solid var(--border-color) to none */
+}
+
+.footer-logo { height: 70px; margin-bottom: 15px; border-radius: 12px; }
+.footer-text { font-weight: 700; color: var(--text-sub); }
+
+/* --- UPDATED MODAL STYLES --- */
+
+/* Modern Success Icon */
+.success-icon-circle {
+    width: 70px;
+    height: 70px;
+    background: #22c55e; /* Vibrant modern green */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.checkmark {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    transform: scaleX(-1) rotate(-45deg); /* Flips 'L' into a checkmark */
+    display: inline-block;
+    margin-bottom: 5px;
+}
+
+/* Fix Crowding */
+.modal-content h2 {
+    margin-bottom: 8px;
+    font-size: 1.6rem;
+}
+
+.modal-subtitle {
+    color: var(--text-sub);
+    margin-bottom: 30px; /* Space between text and buttons */
+    font-size: 1rem;
+}
+
+/* Standardize Button Sizes */
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.full-width {
+    width: 100%;
+    text-align: center;
+    padding: 14px 0 !important; /* Uniform height */
+    font-size: 1rem !important;  /* Uniform font size */
+    box-sizing: border-box;
+}
+
+/* Hover effects for a better feel */
+.primary-btn:hover { background: var(--primary-hover); }
+.secondary-btn:hover { background: rgba(37, 99, 235, 0.05); }
+
+/* Reserve space for the header to prevent layout shift */
+#header-container {
+    min-height: 70px; /* Adjust this to match your actual header height */
+    display: block;
+}
+
+/* Reserve space for the footer */
+#footer-container {
+    min-height: 120px; /* Adjust this to match your actual footer height */
+    display: block;
+}
+
+/* Ensure the main content doesn't jump */
+#main-content {
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+html {
+    /* Reserves space for the scrollbar only if the OS/browser uses one */
+    scrollbar-gutter: stable; 
+    /* Ensures the background color matches your theme across the whole page */
+    background-color: var(--bg-color);
+}
+
+/* Pagination Styling Update */
+#paginationControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 40px;
+    padding-bottom: 40px;
+}
+
+.pg-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-sub);
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.pg-btn:hover:not(:disabled):not(.active) {
+    color: var(--text-main);
+    background-color: var(--border-color);
+}
+
+.pg-btn.active {
+    background-color: var(--primary-blue);
+    color: #ffffff;
+}
+
+.pg-btn.disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.pg-jump-input {
+    width: 80px;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    background: var(--container-bg);
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    margin-left: 10px;
+}
+
+.pg-jump-input:focus {
+    border-color: var(--primary-blue);
+}
+
+/* Container for the jump input and button */
+.pg-jump-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+/* The Go Button Styling */
+.pg-go-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary-blue);
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.pg-go-btn:hover {
+    background: var(--border-color);
+    text-decoration: underline;
+}
+
+/* --- Home Page Spacing & Typography --- */
+.home-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh; /* Centers content vertically in the viewport */
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.home-wrapper h1 {
+    font-size: 3.5rem; /* Increased from 2.8 */
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+    line-height: 1.1;
+}
+
+.home-wrapper p {
+    font-size: 1.25rem; /* Increased from 1.1 */
+    line-height: 1.6;
+    max-width: 650px;
+    margin: 0 auto 40px auto;
+    color: var(--text-sub);
+}
+
+/* --- Hero Button Layout --- */
+.hero-actions {
+    display: flex; 
+    gap: 20px; 
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.primary-btn {
+    padding: 14px 28px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 12px;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}

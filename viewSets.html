@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Block render until theme is applied to prevent white flash
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <title>My Library | AI Study Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <div id="main-content">
+        <div class="app-container" style="max-width: 900px; text-align: left;">
+            <h1 style="margin-bottom: 10px;">Your Study Library</h1>
+            <p style="color: var(--text-sub); margin-bottom: 30px;">Manage your sets or start studying.</p>
+            
+            <div id="setsGrid" class="sets-grid">
+                <p>Loading your study sets...</p>
+            </div>
+
+            <div id="paginationControls"></div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/viewLogic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Optimized Fetch: Load both components before revealing the page
+            Promise.all([
+                fetch('header.html').then(res => res.text()),
+                fetch('footer.html').then(res => res.text())
+            ]).then(([headerData, footerData]) => {
+                document.getElementById('header-container').innerHTML = headerData;
+                document.getElementById('footer-container').innerHTML = footerData;
+                
+                // Initialize dark mode toggle logic
+                if (typeof initTheme === 'function') initTheme();
+                
+                // Reveal the page content once everything is injected
+                document.body.classList.add('content-ready');
+            }).catch(err => {
+                console.error("Error loading page components:", err);
+            });
+        });
+    </script>
+</body>
+</html>
