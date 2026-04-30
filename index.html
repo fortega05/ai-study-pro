@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <title>AI Study Pro | Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="header-container"></div>
+
+    <div id="main-content">
+        <div class="home-wrapper">
+            <span style="color: var(--primary-blue); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 15px; display: block;">
+                Flashcards Made Simple
+            </span>
+
+            <h1>Master Your Subjects</h1>
+            
+            <p>
+                Transform your notes into interactive flashcards in seconds. 
+                Organize your learning and study smarter, not harder.
+            </p>
+
+            <div class="hero-actions">
+                <a href="createSet.html" class="primary-btn">Start Creating</a>
+                <a href="viewSets.html" class="primary-btn" style="background: var(--container-bg); color: var(--primary-blue); border: 2px solid var(--primary-blue);">
+                    My Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Promise.all([
+                fetch('header.html').then(res => res.text()),
+                fetch('footer.html').then(res => res.text())
+            ]).then(([headerData, footerData]) => {
+                document.getElementById('header-container').innerHTML = headerData;
+                document.getElementById('footer-container').innerHTML = footerData;
+                if (typeof initTheme === 'function') initTheme();
+                document.body.classList.add('content-ready');
+            });
+        });
+    </script>
+</body>
+</html>
