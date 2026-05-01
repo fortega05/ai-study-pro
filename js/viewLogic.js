@@ -5,17 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
     renderLibrary();
 });
 
-/**
- * Main function to render the study sets grid
- */
 function renderLibrary() {
     const grid = document.getElementById('setsGrid');
     if (!grid) return;
 
-    // Load sets from LocalStorage
     const sets = JSON.parse(localStorage.getItem('studySets') || '[]');
 
-    // Empty State
     if (sets.length === 0) {
         grid.innerHTML = `<p style="text-align:center; color:var(--text-sub); padding: 40px;">No sets found. Click + Create to start!</p>`;
         const pagination = document.getElementById('paginationControls');
@@ -23,7 +18,6 @@ function renderLibrary() {
         return;
     }
 
-    // Pagination Calculation
     const totalPages = Math.ceil(sets.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const setsToDisplay = sets.slice(startIndex, startIndex + itemsPerPage);
@@ -32,26 +26,29 @@ function renderLibrary() {
     setsToDisplay.forEach(set => {
         const row = document.createElement('div');
         row.className = 'set-row'; 
+        // Using set.id as a data attribute is safer than passing it directly in onclick
         row.innerHTML = `
             <div class="set-info">
                 <span class="card-count">${set.cards.length} Cards</span>
                 <h3>${set.title}</h3>
             </div>
             <div class="card-actions">
-                <a href="study.html?id=${set.id}" class="btn-study">Study</a>
-                <a href="createSet.html?edit=${set.id}" class="btn-edit">Edit</a>
-                <button class="btn-delete" onclick="deleteSet(${set.id})">Delete</button>
+                <a href="studySet.html?id=${set.id}" class="btn-study">Study</a>
+                <a href="editSet.html?id=${set.id}" class="btn-edit">Edit</a>
+                <button class="btn-delete" data-id="${set.id}">Delete</button>
             </div>
         `;
+        
+        // Add event listener directly to the delete button
+        const deleteBtn = row.querySelector('.btn-delete');
+        deleteBtn.addEventListener('click', () => deleteSet(set.id));
+        
         grid.appendChild(row);
     });
 
     renderPagination(totalPages);
 }
 
-/**
- * Renders the minimalist pagination bar
- */
 function renderPagination(totalPages) {
     const container = document.getElementById('paginationControls');
     if (!container) return;
@@ -59,7 +56,7 @@ function renderPagination(totalPages) {
 
     if (totalPages <= 1) return;
 
-    // 1. Previous Arrow
+    // Previous Arrow
     const prev = document.createElement('button');
     prev.className = `pg-btn ${currentPage === 1 ? 'disabled' : ''}`;
     prev.innerHTML = '← Prev';
@@ -72,10 +69,8 @@ function renderPagination(totalPages) {
     };
     container.appendChild(prev);
 
-    // 2. Logic to show first, last, and 1 neighbor (delta=1)
     const delta = 1; 
     let pages = [];
-
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - delta && i <= currentPage + delta)) {
             pages.push(i);
@@ -106,7 +101,7 @@ function renderPagination(totalPages) {
         }
     });
 
-    // 3. Next Arrow
+    // Next Arrow
     const next = document.createElement('button');
     next.className = `pg-btn ${currentPage === totalPages ? 'disabled' : ''}`;
     next.innerHTML = 'Next →';
@@ -119,10 +114,9 @@ function renderPagination(totalPages) {
     };
     container.appendChild(next);
 
-    // 4. "Go to" Input Group with Button
+    // Jump Group
     const jumpGroup = document.createElement('div');
     jumpGroup.className = 'pg-jump-group';
-
     const input = document.createElement('input');
     input.type = 'number';
     input.className = 'pg-jump-input';
@@ -134,7 +128,6 @@ function renderPagination(totalPages) {
     goBtn.className = 'pg-go-btn';
     goBtn.innerText = 'Go';
 
-    // Jump Execution Logic
     const performJump = () => {
         const val = parseInt(input.value);
         if (val >= 1 && val <= totalPages) {
@@ -152,21 +145,43 @@ function renderPagination(totalPages) {
     container.appendChild(jumpGroup);
 }
 
-/**
- * Handles set deletion
- */
 function deleteSet(id) {
-    if (confirm("Delete this set forever?")) {
-        let sets = JSON.parse(localStorage.getItem('studySets') || '[]');
-        sets = sets.filter(s => s.id !== id);
-        localStorage.setItem('studySets', JSON.stringify(sets));
-        
-        // Recalculate page position if the last item on a page was deleted
-        const newTotal = Math.ceil(sets.length / itemsPerPage);
-        if (currentPage > newTotal && currentPage > 1) {
-            currentPage = newTotal;
-        }
-        
-        renderLibrary();
-    }
+    let sets = JSON.parse(localStorage.getItem('studySets') || '[]');
+    const setToDelete = sets.find(s => s.id == id);
+    if (!setToDelete) return;
+    showDeleteModal(id, setToDelete.title);
+}
+
+function showDeleteModal(id, title) {
+    const modal      = document.getElementById('deleteModal');
+    const modalTitle = document.getElementById('deleteModalTitle');
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    const cancelBtn  = document.getElementById('cancelDeleteBtn');
+
+    modalTitle.textContent = `Delete "${title}"?`;
+    modal.style.display    = 'flex';
+
+    const newConfirm = confirmBtn.cloneNode(true);
+    const newCancel  = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancel,  cancelBtn);
+
+    newConfirm.addEventListener('click', () => {
+        modal.style.display = 'none';
+        confirmDeleteSet(id);
+    });
+    newCancel.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+    modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+}
+
+function confirmDeleteSet(id) {
+    let sets = JSON.parse(localStorage.getItem('studySets') || '[]');
+    sets = sets.filter(s => s.id != id);
+    localStorage.setItem('studySets', JSON.stringify(sets));
+
+    const newTotal = Math.ceil(sets.length / itemsPerPage);
+    if (currentPage > newTotal && currentPage > 1) currentPage = newTotal;
+    renderLibrary();
 }

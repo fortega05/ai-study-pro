@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+            const t = localStorage.getItem('theme');
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Set | AI Study Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <div id="edit-content">
+        <div class="app-container">
+
+            <h2 style="margin-bottom: 6px;">Edit Study Set</h2>
+            <p style="color:var(--text-sub); margin-bottom: 30px; font-size:0.95rem;">
+                Update your cards below, then save your changes.
+            </p>
+
+            <!-- Set title -->
+            <input type="text" id="editTitle" placeholder="Set Title…">
+
+            <!-- Card rows injected here by editLogic.js -->
+            <div id="cardInputs"></div>
+
+            <!-- Bottom actions -->
+            <div style="display:flex; flex-direction:column; gap:15px; margin-top:25px;">
+                <button class="secondary-btn" onclick="addCardRow()">+ Add Another Card</button>
+                <button class="primary-btn"   onclick="saveChanges()">Save Changes</button>
+                <a href="viewSets.html"
+                   style="text-align:center; color:var(--text-sub); font-weight:600;
+                          font-size:0.9rem; text-decoration:none; padding:6px 0;">
+                    ← Cancel &amp; Back to Library
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Success modal -->
+    <div id="successModal" class="modal-overlay" style="display:none;">
+        <div class="modal-content">
+            <div class="success-icon-circle">
+                <span class="checkmark">L</span>
+            </div>
+            <h2>Changes Saved!</h2>
+            <p class="modal-subtitle">Your study set has been updated.</p>
+            <div class="modal-actions">
+                <a href="viewSets.html" class="primary-btn full-width">View My Library</a>
+                <button class="secondary-btn full-width"
+                        onclick="document.getElementById('successModal').style.display='none'">
+                    Keep Editing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/editLogic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Promise.all([
+                fetch('header.html').then(r => r.text()),
+                fetch('footer.html').then(r => r.text())
+            ]).then(([h, f]) => {
+                document.getElementById('header-container').innerHTML = h;
+                document.getElementById('footer-container').innerHTML = f;
+                if (typeof initTheme === 'function') initTheme();
+            }).then(() => {
+                initEdit();
+            });
+        });
+    </script>
+
+</body>
+</html>
