@@ -411,3 +411,376 @@ html {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
 }
+
+/* ============================================
+   --- STUDY SET PAGE (studySet.html) ---
+   ============================================ */
+
+#study-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px 60px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.study-header {
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.study-set-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 60%;
+}
+
+.study-progress-text {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-sub);
+    flex-shrink: 0;
+}
+
+/* Progress Bar */
+.progress-bar-track {
+    width: 100%;
+    max-width: 700px;
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 99px;
+    margin-bottom: 32px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--primary-blue);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+}
+
+/* --- FLASHCARD 3D FLIP --- */
+.card-scene {
+    width: 100%;
+    max-width: 700px;
+    height: 320px;
+    perspective: 1200px;
+    cursor: pointer;
+    margin-bottom: 16px;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+    border-radius: 24px;
+}
+
+.card-scene.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 24px;
+    background: var(--container-bg);
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    user-select: none;
+}
+
+.card-face-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-sub);
+    margin-bottom: 18px;
+}
+
+.card-face-text {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--text-main);
+    line-height: 1.35;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    border-color: var(--primary-blue);
+}
+
+.card-back .card-face-label {
+    color: var(--primary-blue);
+}
+
+.card-hint {
+    font-size: 0.82rem;
+    color: var(--text-sub);
+    font-weight: 500;
+    margin-bottom: 24px;
+    height: 20px;
+}
+
+/* --- RIGHT / WRONG BUTTONS --- */
+.answer-btns {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.answer-btns.hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.btn-wrong {
+    flex: 1;
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px solid var(--danger-red);
+    background: transparent;
+    color: var(--danger-red);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.btn-wrong:hover {
+    background: var(--danger-red);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-correct {
+    flex: 1;
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px solid #22c55e;
+    background: transparent;
+    color: #22c55e;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.btn-correct:hover {
+    background: #22c55e;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* --- RESULTS SCREEN --- */
+#resultsScreen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 700px;
+    animation: fadeIn 0.4s ease;
+}
+
+.results-card {
+    background: var(--container-bg);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+    padding: 50px 50px 40px;
+    width: 100%;
+    text-align: center;
+}
+
+.grade-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+}
+
+.grade-letter {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.grade-pct {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+.results-card h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.results-card > p {
+    color: var(--text-sub);
+    font-size: 1rem;
+    margin-bottom: 32px;
+}
+
+.results-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.stat-box {
+    flex: 1;
+    background: var(--bg-color);
+    border-radius: 16px;
+    padding: 20px;
+    border: 2px solid var(--border-color);
+}
+
+.stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-sub);
+}
+
+.stat-correct .stat-num { color: #22c55e; }
+.stat-wrong   .stat-num { color: var(--danger-red); }
+
+.results-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Missed cards list */
+.missed-section {
+    width: 100%;
+    margin-top: 32px;
+    text-align: left;
+    border-top: 2px solid var(--border-color);
+    padding-top: 28px;
+}
+
+.missed-section h3 {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--text-sub);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+}
+
+.missed-card-item {
+    background: var(--bg-color);
+    border: 2px solid var(--border-color);
+    border-left: 4px solid var(--danger-red);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.missed-term {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+
+.missed-def {
+    font-size: 0.85rem;
+    color: var(--text-sub);
+}
+
+/* Card slide-out animation */
+@keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to   { opacity: 0; transform: translateX(-60px) scale(0.97); }
+}
+
+.card-exit {
+    animation: slideOutLeft 0.28s ease forwards;
+}
+
+
+/* ============================================
+   --- EDIT SET PAGE (editSet.html) ---
+   ============================================ */
+
+#edit-content {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 20px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.card-number-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-sub);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.edit-card-block {
+    background: var(--bg-color);
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+}
+
+.edit-card-block:hover {
+    border-color: var(--primary-blue);
+}
+
+.edit-card-block .card-row {
+    margin-bottom: 0;
+}
+
+.edit-card-block input[type="text"] {
+    margin-bottom: 0;
+}

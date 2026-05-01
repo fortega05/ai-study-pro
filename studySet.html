@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script>
+        (function() {
+            const t = localStorage.getItem('theme');
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study | AI Study Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div id="header-container"></div>
+
+    <div id="study-content">
+
+        <!-- ── STUDY SCREEN ── -->
+        <div id="studyScreen" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+
+            <div class="study-header">
+                <span class="study-set-title" id="studySetTitle">Loading…</span>
+                <span class="study-progress-text" id="progressText">— / —</span>
+            </div>
+
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+            </div>
+
+            <!-- Flashcard -->
+            <div class="card-scene" id="cardScene" onclick="flipCard()">
+                <div class="card-inner" id="cardInner">
+
+                    <div class="card-face card-front">
+                        <span class="card-face-label">Term</span>
+                        <span class="card-face-text" id="termText">—</span>
+                    </div>
+
+                    <div class="card-face card-back">
+                        <span class="card-face-label">Definition</span>
+                        <span class="card-face-text" id="defText">—</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <p class="card-hint" id="cardHint">Click the card to reveal the definition</p>
+
+            <!-- Answer buttons (hidden until card is flipped) -->
+            <div class="answer-btns hidden" id="answerBtns">
+                <button class="btn-wrong"   onclick="recordAnswer(false)">✕ &nbsp;Got It Wrong</button>
+                <button class="btn-correct" onclick="recordAnswer(true)">✓ &nbsp;Got It Right</button>
+            </div>
+
+        </div>
+
+        <!-- ── RESULTS SCREEN ── -->
+        <div id="resultsScreen">
+
+            <div class="results-card">
+
+                <div class="grade-circle" id="gradeCircle">
+                    <span class="grade-letter" id="gradeLetter">—</span>
+                    <span class="grade-pct"    id="gradePct">—</span>
+                </div>
+
+                <h2 id="resultsHeadline">Nice work!</h2>
+                <p  id="resultsSubtitle">You completed the set.</p>
+
+                <div class="results-stats">
+                    <div class="stat-box stat-correct">
+                        <span class="stat-num"   id="correctCount">0</span>
+                        <span class="stat-label">Correct</span>
+                    </div>
+                    <div class="stat-box stat-wrong">
+                        <span class="stat-num"   id="wrongCount">0</span>
+                        <span class="stat-label">Incorrect</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num"   id="totalCount">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="primary-btn full-width" id="retryWrongBtn"
+                            style="display:none;" onclick="retryMissed()">
+                        🔁 &nbsp;Study Missed Cards
+                    </button>
+                    <button class="primary-btn full-width" onclick="restartAll()"
+                            style="background:var(--container-bg);color:var(--primary-blue);border:2px solid var(--primary-blue);">
+                        ↺ &nbsp;Restart All Cards
+                    </button>
+                    <a href="viewSets.html" class="secondary-btn full-width"
+                       style="text-align:center;text-decoration:none;display:block;padding:14px 0;">
+                        ← Back to Library
+                    </a>
+                </div>
+
+                <div class="missed-section" id="missedSection" style="display:none;">
+                    <h3>Cards to Review</h3>
+                    <div id="missedList"></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="footer-container"></div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/studyLogic.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Promise.all([
+                fetch('header.html').then(r => r.text()),
+                fetch('footer.html').then(r => r.text())
+            ]).then(([h, f]) => {
+                document.getElementById('header-container').innerHTML = h;
+                document.getElementById('footer-container').innerHTML = f;
+                if (typeof initTheme === 'function') initTheme();
+            }).then(() => {
+                initStudy();
+            });
+        });
+    </script>
+
+</body>
+</html>

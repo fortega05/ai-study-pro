@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        // Block render until theme is applied to prevent white flash
         (function() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
@@ -31,24 +30,36 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div style="width: 70px; height: 70px; background: var(--danger-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);">
+                <span style="color: white; font-size: 32px; font-weight: bold; line-height: 1;">!</span>
+            </div>
+
+            <h2 id="deleteModalTitle" style="margin-bottom: 8px; font-size: 1.4rem;">Delete this set?</h2>
+            <p class="modal-subtitle">This action cannot be undone.</p>
+
+            <div class="modal-actions">
+                <button id="confirmDeleteBtn" class="primary-btn full-width" style="background: var(--danger-red);">Yes, Delete It</button>
+                <button id="cancelDeleteBtn" class="secondary-btn full-width">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <div id="footer-container"></div>
 
     <script src="js/theme.js"></script>
     <script src="js/viewLogic.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Optimized Fetch: Load both components before revealing the page
             Promise.all([
                 fetch('header.html').then(res => res.text()),
                 fetch('footer.html').then(res => res.text())
             ]).then(([headerData, footerData]) => {
                 document.getElementById('header-container').innerHTML = headerData;
                 document.getElementById('footer-container').innerHTML = footerData;
-                
-                // Initialize dark mode toggle logic
                 if (typeof initTheme === 'function') initTheme();
-                
-                // Reveal the page content once everything is injected
                 document.body.classList.add('content-ready');
             }).catch(err => {
                 console.error("Error loading page components:", err);
